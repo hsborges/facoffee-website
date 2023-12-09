@@ -1,0 +1,9 @@
+import { SignupForm } from '@/components/SignForm';
+
+export default function LoginPage() {
+  return (
+    <div className="h-full flex justify-center align-center mt-[-5vh]">
+      <SignupForm />
+    </div>
+  );
+}
