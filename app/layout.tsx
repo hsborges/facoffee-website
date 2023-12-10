@@ -1,3 +1,4 @@
+import Navbar from '@/components/Navbar';
 import type { Metadata } from 'next';
 import { Rubik } from 'next/font/google';
 
@@ -15,7 +16,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="pt-BR">
       <body className={rubik.className + ' w-screen h-screen'}>
-        <Providers>{children}</Providers>
+        <Providers>
+          <main className="flex flex-col w-full h-screen">
+            <Navbar className="px-[5%]" />
+            <section className="grow px-[5%] pt-4">{children}</section>
+          </main>
+        </Providers>
       </body>
     </html>
   );

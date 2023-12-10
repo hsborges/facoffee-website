@@ -1,30 +1,42 @@
+import classNames from 'classnames';
 import { HTMLAttributes } from 'react';
 import { BiSolidCoffeeBean } from 'react-icons/bi';
 
 export type LogoProps = HTMLAttributes<HTMLElement> & {
   horizontal?: boolean;
   size?: 'normal' | 'lg';
+  variant?: 'normal' | 'white';
 };
 
-const scales: Record<'normal' | 'lg', number> = { normal: 1, lg: 2 };
+export default function Logo({
+  horizontal,
+  size = 'normal',
+  className,
+  variant = 'normal',
+}: LogoProps) {
+  const colors =
+    variant === 'normal'
+      ? { primary: 'text-primary', secondary: 'text-primary-alt' }
+      : { primary: 'text-white', secondary: 'text-primary-alt' };
 
-export default function Logo({ horizontal, size, ...props }: LogoProps) {
+  const textSize = size == 'normal' ? 'text-xl' : 'text-2xl';
+
   return (
     <span
-      {...props}
-      className={
-        `font-extrabold text-primary flex items-center gap-1 text-${scales[size || 'normal']}xl` +
-        (horizontal ? ' flex-col gap-0 ' : ' ') +
-        (props.className || ' ')
-      }
+      className={classNames(
+        'font-extrabold flex items-center gap-1',
+        textSize,
+        horizontal && 'flex-col gap-0',
+        className,
+      )}
     >
       <BiSolidCoffeeBean
-        className="text-primary-alt"
+        className={colors.secondary}
         style={{ fontSize: horizontal ? '1.5em' : '1.25em' }}
       />
-      <span className="text-primary-alt">
+      <span className={classNames(colors.secondary, 'tracking-wide')}>
         FA
-        <span className="text-primary">COFFEE</span>
+        <span className={colors.primary}>COFFEE</span>
       </span>
     </span>
   );
