@@ -1,4 +1,5 @@
 import Navbar from '@/components/Navbar';
+import classNames from 'classnames';
 import type { Metadata } from 'next';
 import { Rubik } from 'next/font/google';
 
@@ -15,13 +16,8 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="pt-BR">
-      <body className={rubik.className + ' w-screen h-screen'}>
-        <Providers>
-          <main className="flex flex-col w-full h-screen">
-            <Navbar className="px-[5%]" />
-            <section className="grow px-[5%] pt-4">{children}</section>
-          </main>
-        </Providers>
+      <body className={classNames(rubik.className, 'w-screen h-screen')}>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );
