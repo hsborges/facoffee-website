@@ -9,9 +9,9 @@ export const PasswordInput = forwardRef(function PasswordInput(props: InputProps
 
   return (
     <InputGroup>
-      <Input pr="3rem" type={show ? 'text' : 'password'} ref={ref} {...props} />
+      <Input data-testid="input" pr="3rem" type={show ? 'text' : 'password'} ref={ref} {...props} />
       <InputRightElement width="3rem">
-        <Icon className="cursor-pointer opacity-50" onClick={setShow.toggle} />
+        <Icon data-testid="button" className="cursor-pointer opacity-50" onClick={setShow.toggle} />
       </InputRightElement>
     </InputGroup>
   );
