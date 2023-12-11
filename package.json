@@ -13,16 +13,19 @@
     "@chakra-ui/react": "^2.8.2",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
+    "@hookform/resolvers": "^3.3.2",
     "classnames": "^2.3.2",
     "framer-motion": "^10.16.16",
     "next": "14.0.4",
     "nextjs-cors": "^2.1.2",
     "react": "^18",
     "react-dom": "^18",
+    "react-hook-form": "^7.49.0",
     "react-icons": "^4.12.0",
     "supertokens-auth-react": "^0.35.9",
     "supertokens-node": "^16.6.4",
-    "supertokens-web-js": "^0.8.0"
+    "supertokens-web-js": "^0.8.0",
+    "zod": "^3.22.4"
   },
   "devDependencies": {
     "@commitlint/cli": "^18.4.3",

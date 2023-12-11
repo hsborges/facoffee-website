@@ -11,10 +11,14 @@ import {
   Input,
   Text,
 } from '@chakra-ui/react';
+import { zodResolver } from '@hookform/resolvers/zod';
+import classNames from 'classnames';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { FormEvent, useCallback, useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { signIn, signUp } from 'supertokens-auth-react/recipe/emailpassword';
+import { z } from 'zod';
 
 import { PasswordInput } from './PasswordInput';
 
@@ -34,146 +38,117 @@ type FormProps = {
   signupUrl?: string;
 };
 
-const defaultFormInfo: FormInfo = {
-  email: '',
-  password: '',
-  confirm_password: '',
-  first_name: '',
-  last_name: '',
-};
-
 function Form(props: FormProps) {
   const router = useRouter();
 
-  const [data, setData] = useState<FormInfo>(defaultFormInfo);
+  let schema = z
+    .object({
+      email: z.string().email({ message: 'Email inválido' }),
+      password: z.string().min(8, { message: 'Senha deve ter no mínimo 8 caracteres' }),
+    })
+    .and(
+      z.object(
+        props.type === 'signup'
+          ? {
+              confirm_password: z
+                .string()
+                .min(8, { message: 'Senha deve ter no mínimo 8 caracteres' }),
+              first_name: z.string().min(3, { message: 'Nome deve ter no mínimo 3 caracteres' }),
+              last_name: z.string().min(3, { message: 'Nome deve ter no mínimo 3 caracteres' }),
+            }
+          : {},
+      ),
+    )
+    .refine((data) => props.type === 'signin' || data.password === data.confirm_password, {
+      message: 'Senhas não conferem',
+      path: ['confirm_password'],
+    });
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setError,
+  } = useForm<FormInfo>({
+    resolver: zodResolver(schema),
+  });
+
   const [success, setSuccess] = useState<string>();
-  const [error, setError] = useState<string>();
-  const [errors, setErrors] = useState<Partial<Record<keyof FormInfo, string>>>();
+  const [resultError, setResultError] = useState<string>();
 
   useEffect(() => {
-    setData(defaultFormInfo);
-    setErrors({});
-    setError(undefined);
+    setResultError(undefined);
     const timer = success && setTimeout(() => setSuccess(undefined), 5000);
     return () => clearTimeout(timer);
   }, [success]);
 
   useEffect(() => {
-    const timer = error && setTimeout(() => setError(undefined), 5000);
+    const timer = resultError && setTimeout(() => setResultError(undefined), 5000);
     return () => clearTimeout(timer);
-  }, [error]);
+  }, [resultError]);
 
-  const handleValueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setData((v) => ({ ...v, [e.target.name]: e.target.value }));
-    setErrors((err) => ({ ...err, [e.target.name]: undefined }));
+  useEffect(() => console.log(errors), [errors]);
+
+  const finalSubmit = async (data: FormInfo) => {
+    console.log('🚀 ~ file: SignForm.tsx:79 ~ finalSubmit ~ data:', data);
+
+    if (props.type === 'signin') {
+      const response = await signIn({
+        formFields: [
+          { id: 'email', value: data.email as string },
+          { id: 'password', value: data.password as string },
+        ],
+      });
+
+      if (response.status === 'FIELD_ERROR') {
+        response.formFields.forEach((field) =>
+          setError(field.id as keyof FormInfo, { message: field.error, type: 'validate' }),
+        );
+      } else if (response.status === 'SIGN_IN_NOT_ALLOWED') {
+        setResultError('Login não permitido');
+      } else if (response.status === 'WRONG_CREDENTIALS_ERROR') {
+        setResultError('Email ou senha incorretos');
+      } else {
+        router.push(props.redirectTo);
+      }
+    }
+
+    if (props.type === 'signup') {
+      const response = await signUp({
+        formFields: [
+          { id: 'email', value: data.email as string },
+          { id: 'password', value: data.password as string },
+          { id: 'first_name', value: data.first_name as string },
+          { id: 'last_name', value: data.last_name as string },
+        ],
+      });
+      if (response.status === 'FIELD_ERROR') {
+        response.formFields.forEach((field) =>
+          setError(field.id as keyof FormInfo, { message: field.error, type: 'validate' }),
+        );
+      } else if (response.status === 'SIGN_UP_NOT_ALLOWED') {
+        setResultError('Cadastro não permitido');
+      } else {
+        setSuccess('Cadastro realizado com sucesso!');
+      }
+    }
   };
 
-  const validateForm = useCallback(
-    (
-      fields: Array<keyof FormInfo> = [
-        'email',
-        'password',
-        'confirm_password',
-        'first_name',
-        'last_name',
-      ],
-    ) => {
-      let _errors: Partial<Record<keyof FormInfo, string>> = {};
-
-      for (const key of fields) {
-        if (!data[key as keyof FormInfo]) _errors[key as keyof FormInfo] = 'Campo obrigatório';
-
-        if (key === 'password') {
-          if (!data.password || data.password.length < 8)
-            _errors.confirm_password = _errors.password = 'Senha deve ter no mínimo 8 caracteres';
-        }
-
-        if (key === 'confirm_password') {
-          if (data.confirm_password !== data.password)
-            _errors.confirm_password = 'As senhas não conferem';
-        }
-      }
-
-      return _errors;
-    },
-    [data],
-  );
-
-  const handleSubmit = useCallback(
-    async (event: FormEvent) => {
-      event.preventDefault();
-
-      if (props.type === 'signin') {
-        const _errors = validateForm(['email', 'password']);
-        if (Object.keys(_errors).length) return setErrors((err) => ({ ...err, ..._errors }));
-
-        const response = await signIn({
-          formFields: [
-            { id: 'email', value: data.email as string },
-            { id: 'password', value: data.password as string },
-          ],
-        });
-
-        if (response.status === 'FIELD_ERROR') {
-          setErrors((err) =>
-            response.formFields.reduce(
-              (memo, field) => ({ ...memo, [field.id]: field.error }),
-              err,
-            ),
-          );
-        } else if (response.status === 'SIGN_IN_NOT_ALLOWED') {
-          setError('Login não permitido');
-        } else if (response.status === 'WRONG_CREDENTIALS_ERROR') {
-          setError('Email ou senha incorretos');
-        } else {
-          router.push(props.redirectTo);
-        }
-      }
-
-      if (props.type === 'signup') {
-        const _errors = validateForm();
-        if (Object.keys(_errors).length) return setErrors((err) => ({ ...err, ..._errors }));
-
-        const response = await signUp({
-          formFields: [
-            { id: 'email', value: data.email as string },
-            { id: 'password', value: data.password as string },
-            { id: 'first_name', value: data.first_name as string },
-            { id: 'last_name', value: data.last_name as string },
-          ],
-        });
-
-        if (response.status === 'FIELD_ERROR') {
-          setErrors((err) =>
-            response.formFields.reduce(
-              (memo, field) => ({ ...memo, [field.id]: field.error }),
-              err,
-            ),
-          );
-        } else if (response.status === 'SIGN_UP_NOT_ALLOWED') {
-          setError('Cadastro não permitido');
-        } else {
-          setSuccess('Cadastro realizado com sucesso!');
-        }
-      }
-    },
-    [props.type, data, validateForm, router, props.redirectTo],
-  );
-
-  const url = props.type === 'signin' ? props.signupUrl : props.signinUrl;
+  const url = useMemo(() => (props.type === 'signin' ? props.signupUrl : props.signinUrl), [props]);
 
   return (
     <form
-      className={
-        'flex justify-center px-4 flex-col w-full sm:min-w-[400px] md:w-1/3  ' + props.className
-      }
-      onSubmit={handleSubmit}
+      className={classNames(
+        'flex justify-center px-4 flex-col w-full sm:min-w-[400px] md:w-1/3',
+        props.className,
+      )}
+      onSubmit={handleSubmit(finalSubmit)}
     >
       <Logo horizontal size="lg" className="mb-5" />
-      {error && (
+      {resultError && (
         <Alert status="error" variant={'left-accent'} className="my-3">
           <AlertIcon />
-          {error}
+          {resultError}
         </Alert>
       )}
       {success && (
@@ -184,47 +159,33 @@ function Form(props: FormProps) {
       )}
       {props.type === 'signup' && (
         <div className="flex gap-5 my-3">
-          <FormControl isRequired isInvalid={!!errors?.first_name}>
+          <FormControl isRequired isInvalid={!!errors.first_name}>
             <FormLabel>Nome</FormLabel>
-            <Input
-              type="text"
-              name="first_name"
-              value={data.first_name}
-              onChange={handleValueChange}
-            />
-            <FormErrorMessage>{errors?.first_name}</FormErrorMessage>
+            <Input type="text" {...register('first_name')} />
+            <FormErrorMessage>{errors.first_name?.message}</FormErrorMessage>
           </FormControl>
-          <FormControl isRequired isInvalid={!!errors?.last_name}>
+          <FormControl isRequired isInvalid={!!errors.last_name}>
             <FormLabel>Sobernome</FormLabel>
-            <Input
-              type="text"
-              name="last_name"
-              value={data.last_name}
-              onChange={handleValueChange}
-            />
-            <FormErrorMessage>{errors?.last_name}</FormErrorMessage>
+            <Input type="text" {...register('last_name')} />
+            <FormErrorMessage>{errors.last_name?.message}</FormErrorMessage>
           </FormControl>
         </div>
       )}
-      <FormControl isRequired isInvalid={errors?.email !== undefined} className="my-3">
+      <FormControl isRequired isInvalid={!!errors.email} className="my-3">
         <FormLabel>Email</FormLabel>
-        <Input type="email" name="email" value={data.email} onChange={handleValueChange} />
-        <FormErrorMessage>{errors?.email}</FormErrorMessage>
+        <Input type="email" {...register('email')} />
+        <FormErrorMessage>{errors.email?.message}</FormErrorMessage>
       </FormControl>
-      <FormControl isInvalid={errors?.password !== undefined} isRequired className="my-3">
+      <FormControl isInvalid={!!errors.password} isRequired className="my-3">
         <FormLabel>Senha</FormLabel>
-        <PasswordInput value={data.password} name="password" onChange={handleValueChange} />
-        <FormErrorMessage>{errors?.password}</FormErrorMessage>
+        <PasswordInput {...register('password')} />
+        <FormErrorMessage>{errors.password?.message}</FormErrorMessage>
       </FormControl>
       {props.type === 'signup' && (
-        <FormControl isRequired isInvalid={!!errors?.confirm_password} className="my-3">
+        <FormControl isRequired isInvalid={!!errors.confirm_password} className="my-3">
           <FormLabel>Confirmar Senha</FormLabel>
-          <PasswordInput
-            value={data.confirm_password}
-            name="confirm_password"
-            onChange={handleValueChange}
-          />
-          <FormErrorMessage>{errors?.confirm_password}</FormErrorMessage>
+          <PasswordInput {...register('confirm_password')} />
+          <FormErrorMessage>{errors.confirm_password?.message}</FormErrorMessage>
         </FormControl>
       )}
       <Button
