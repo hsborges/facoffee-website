@@ -18,7 +18,7 @@ describe('PasswordInput', () => {
     expect(screen.getByTestId<HTMLInputElement>('input').type).toBe('text');
   });
 
-  it('deve permitir a digitação de texto', async () => {
+  it('deve permitir a entrada de texto', async () => {
     const { container } = render(<PasswordInput />);
 
     await expect(screen.findByDisplayValue('12345')).rejects.toThrow();
