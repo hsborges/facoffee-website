@@ -90,8 +90,6 @@ function Form(props: FormProps) {
   useEffect(() => console.log(errors), [errors]);
 
   const finalSubmit = async (data: FormInfo) => {
-    console.log('🚀 ~ file: SignForm.tsx:79 ~ finalSubmit ~ data:', data);
-
     if (props.type === 'signin') {
       const response = await signIn({
         formFields: [
