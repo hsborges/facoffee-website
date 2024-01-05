@@ -1,6 +1,6 @@
 'use client';
 
-import { SessionAuth } from 'supertokens-auth-react/recipe/session';
+import { ClaimValidationResult, SessionAuth } from 'supertokens-auth-react/recipe/session';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (

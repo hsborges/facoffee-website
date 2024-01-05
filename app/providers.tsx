@@ -17,10 +17,19 @@ if (typeof window !== 'undefined') {
       websiteBasePath: process.env.NEXT_PUBLIC_WEBSITE_URL_PATH,
     },
     recipeList: [
-      EmailPassword.init(),
+      EmailPassword.init({
+        async getRedirectionURL(context) {
+          if (context.action !== 'SUCCESS') return '/login';
+          else context.redirectToPath;
+        },
+      }),
       EmailVerification.init({ mode: 'REQUIRED' }),
       Session.init(),
     ],
+    async getRedirectionURL(context) {
+      if (context.action === 'TO_AUTH') return '/login';
+      if (context.showSignIn) return '/registrar';
+    },
   });
 }
 

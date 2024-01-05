@@ -78,7 +78,7 @@ function Form(props: FormProps) {
     resolver: zodResolver(schema),
   });
 
-  const finalSubmit = async (data: FormInfo) => {
+  const submitForm = async (data: FormInfo) => {
     let promise: Promise<void> = Promise.resolve(setLoading(true));
 
     if (props.type === 'signin') {
@@ -141,7 +141,7 @@ function Form(props: FormProps) {
         'flex justify-center px-4 flex-col w-full sm:min-w-[400px] md:w-1/3',
         props.className,
       )}
-      onSubmit={handleSubmit(finalSubmit)}
+      onSubmit={handleSubmit(submitForm)}
     >
       <Logo horizontal size="lg" className="mb-5" />
       {props.type === 'signup' && (
@@ -177,9 +177,8 @@ function Form(props: FormProps) {
       )}
       <Button
         type="submit"
+        colorScheme="primary-alt"
         className="my-5 hover:bg-primary-alt"
-        bg={'primary'}
-        _hover={{ color: 'white' }}
         isLoading={loading}
       >
         {props.type === 'signin' ? 'Entrar' : 'Registrar'}
