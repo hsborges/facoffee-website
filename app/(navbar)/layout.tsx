@@ -1,10 +1,10 @@
-import Navbar from '@/components/Navbar';
+import Navbar from '@/app/components/Navbar';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <main className="flex flex-col w-full h-screen">
-      <Navbar className="px-[5%]" />
-      <section className="grow px-[5%] pt-4">{children}</section>
+    <main className="flex flex-col overflow-x-hidden h-full">
+      <Navbar className="px-[5vw]" />
+      <section className="mx-[5vw] mt-4 grow">{children}</section>
     </main>
   );
 }

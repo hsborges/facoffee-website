@@ -1,12 +1,15 @@
-import Navbar from '@/components/Navbar';
+import Navbar from '@/app/components/Navbar';
 import classNames from 'classnames';
 import type { Metadata } from 'next';
 import { Rubik } from 'next/font/google';
+import numeral from 'numeral';
 
 import './globals.css';
 import { Providers } from './providers';
 
 const rubik = Rubik({ subsets: ['latin'], variable: '--font-rubik' });
+
+numeral.locale('pt-br');
 
 export const metadata: Metadata = {
   title: 'Facoffee App',
@@ -16,7 +19,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="pt-BR">
-      <body className={classNames(rubik.className, 'w-screen h-screen')}>
+      <body className={classNames(rubik.className, 'h-screen w-screen')}>
         <Providers>{children}</Providers>
       </body>
     </html>

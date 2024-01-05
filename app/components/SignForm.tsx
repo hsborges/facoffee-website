@@ -1,6 +1,6 @@
 'use client';
 
-import Logo from '@/components/Logo';
+import Logo from '@/app/components/Logo';
 import {
   Alert,
   AlertIcon,
@@ -10,9 +10,11 @@ import {
   FormLabel,
   Input,
   Text,
+  useToast,
 } from '@chakra-ui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import classNames from 'classnames';
+import { set } from 'lodash';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
@@ -40,6 +42,9 @@ type FormProps = {
 
 function Form(props: FormProps) {
   const router = useRouter();
+  const toast = useToast();
+
+  const [loading, setLoading] = useState(false);
 
   let schema = z
     .object({
@@ -73,63 +78,59 @@ function Form(props: FormProps) {
     resolver: zodResolver(schema),
   });
 
-  const [success, setSuccess] = useState<string>();
-  const [resultError, setResultError] = useState<string>();
-
-  useEffect(() => {
-    setResultError(undefined);
-    const timer = success && setTimeout(() => setSuccess(undefined), 5000);
-    return () => clearTimeout(timer);
-  }, [success]);
-
-  useEffect(() => {
-    const timer = resultError && setTimeout(() => setResultError(undefined), 5000);
-    return () => clearTimeout(timer);
-  }, [resultError]);
-
-  useEffect(() => console.log(errors), [errors]);
-
   const finalSubmit = async (data: FormInfo) => {
-    if (props.type === 'signin') {
-      const response = await signIn({
-        formFields: [
-          { id: 'email', value: data.email as string },
-          { id: 'password', value: data.password as string },
-        ],
-      });
+    let promise: Promise<void> = Promise.resolve(setLoading(true));
 
-      if (response.status === 'FIELD_ERROR') {
-        response.formFields.forEach((field) =>
-          setError(field.id as keyof FormInfo, { message: field.error, type: 'validate' }),
-        );
-      } else if (response.status === 'SIGN_IN_NOT_ALLOWED') {
-        setResultError('Login não permitido');
-      } else if (response.status === 'WRONG_CREDENTIALS_ERROR') {
-        setResultError('Email ou senha incorretos');
-      } else {
-        router.push(props.redirectTo);
-      }
+    if (props.type === 'signin') {
+      promise = promise.then(() =>
+        signIn({
+          formFields: [
+            { id: 'email', value: data.email as string },
+            { id: 'password', value: data.password as string },
+          ],
+        }).then((response) => {
+          if (response.status === 'OK') return router.push(props.redirectTo);
+
+          if (response.status === 'FIELD_ERROR') {
+            response.formFields.forEach((field) =>
+              setError(field.id as keyof FormInfo, { message: field.error, type: 'validate' }),
+            );
+          } else if (response.status === 'SIGN_IN_NOT_ALLOWED') {
+            setError('email', { message: 'Login não permitido', type: 'validate' });
+          } else if (response.status === 'WRONG_CREDENTIALS_ERROR') {
+            setError('email', { message: 'Email ou senha incorretos', type: 'validate' });
+            setError('password', { message: 'Email ou senha incorretos', type: 'validate' });
+          }
+        }),
+      );
     }
 
     if (props.type === 'signup') {
-      const response = await signUp({
-        formFields: [
-          { id: 'email', value: data.email as string },
-          { id: 'password', value: data.password as string },
-          { id: 'first_name', value: data.first_name as string },
-          { id: 'last_name', value: data.last_name as string },
-        ],
-      });
-      if (response.status === 'FIELD_ERROR') {
-        response.formFields.forEach((field) =>
-          setError(field.id as keyof FormInfo, { message: field.error, type: 'validate' }),
-        );
-      } else if (response.status === 'SIGN_UP_NOT_ALLOWED') {
-        setResultError('Cadastro não permitido');
-      } else {
-        setSuccess('Cadastro realizado com sucesso!');
-      }
+      promise = promise.then(() =>
+        signUp({
+          formFields: [
+            { id: 'email', value: data.email as string },
+            { id: 'password', value: data.password as string },
+            { id: 'first_name', value: data.first_name as string },
+            { id: 'last_name', value: data.last_name as string },
+          ],
+        }).then((response) => {
+          if (response.status === 'OK') return router.push(props.redirectTo);
+
+          if (response.status === 'FIELD_ERROR') {
+            response.formFields.forEach((field) =>
+              setError(field.id as keyof FormInfo, { message: field.error, type: 'validate' }),
+            );
+          } else if (response.status === 'SIGN_UP_NOT_ALLOWED') {
+            setError('email', { message: 'Cadastro não permitido', type: 'validate' });
+          }
+        }),
+      );
     }
+
+    await promise
+      .catch((error) => toast({ title: error.message, status: 'error', position: 'top' }))
+      .finally(() => setLoading(false));
   };
 
   const url = useMemo(() => (props.type === 'signin' ? props.signupUrl : props.signinUrl), [props]);
@@ -143,18 +144,6 @@ function Form(props: FormProps) {
       onSubmit={handleSubmit(finalSubmit)}
     >
       <Logo horizontal size="lg" className="mb-5" />
-      {resultError && (
-        <Alert status="error" variant={'left-accent'} className="my-3">
-          <AlertIcon />
-          {resultError}
-        </Alert>
-      )}
-      {success && (
-        <Alert status="success" variant={'left-accent'} className="my-3">
-          <AlertIcon />
-          {success}
-        </Alert>
-      )}
       {props.type === 'signup' && (
         <div className="flex gap-5 my-3">
           <FormControl isRequired isInvalid={!!errors.first_name}>
@@ -191,6 +180,7 @@ function Form(props: FormProps) {
         className="my-5 hover:bg-primary-alt"
         bg={'primary'}
         _hover={{ color: 'white' }}
+        isLoading={loading}
       >
         {props.type === 'signin' ? 'Entrar' : 'Registrar'}
       </Button>

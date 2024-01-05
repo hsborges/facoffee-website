@@ -28,7 +28,7 @@ export default function Navbar(props: { className?: string }) {
         props.className,
       )}
     >
-      <Link href={'/'}>
+      <Link href={context.loading || !context.doesSessionExist ? '/' : '/me'}>
         <Logo variant="white" size="lg" />
       </Link>
       {!context.loading && context.doesSessionExist ? (

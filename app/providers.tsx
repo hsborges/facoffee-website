@@ -1,6 +1,6 @@
 'use client';
 
-import { ChakraProvider } from '@chakra-ui/react';
+import { ChakraProvider, defineStyleConfig, withDefaultColorScheme } from '@chakra-ui/react';
 import { extendTheme } from '@chakra-ui/react';
 import SuperTokens, { SuperTokensWrapper } from 'supertokens-auth-react';
 import EmailPassword from 'supertokens-auth-react/recipe/emailpassword';
@@ -30,8 +30,49 @@ export const theme = extendTheme({
     body: 'var(--font-rubik)',
   },
   colors: {
-    primary: '#D7B595',
-    'primary-alt': '#3E372C',
+    primary: {
+      default: '#D7B595',
+      '50': '#F8F2EC',
+      '100': '#EBDBCB',
+      '200': '#DFC4AA',
+      '300': '#D2AC89',
+      '400': '#C69567',
+      '500': '#D7B595',
+      '600': '#946538',
+      '700': '#6F4B2A',
+      '800': '#4A321C',
+      '900': '#25190E',
+    },
+    'primary-alt': {
+      default: '#3E372C',
+      '50': '#F4F3F0',
+      '100': '#E1DDD5',
+      '200': '#CEC7BA',
+      '300': '#BBB0A0',
+      '400': '#A89A85',
+      '500': '#95846A',
+      '600': '#776A55',
+      '700': '#594F40',
+      '800': '#3C352A',
+      '900': '#1E1A15',
+    },
+  },
+  semanticTokens: {
+    colors: {
+      primary: 'primary.default',
+      'primary-alt': 'primary-alt.default',
+    },
+  },
+  components: {
+    Button: defineStyleConfig({
+      variants: {
+        primary: {
+          bgColor: 'primary',
+          color: 'primary-alt',
+          _hover: { bgColor: 'primary-alt', color: 'primary' },
+        },
+      },
+    }),
   },
 });
 
