@@ -1,8 +1,8 @@
 'use client';
 
-import { inscrever, useAssinatura } from '@/apis/assinatura';
-import { Plano, usePlanos } from '@/apis/planos';
-import { currency } from '@/utils/formatter';
+import { inscrever, useAssinatura } from '@/services/assinatura';
+import { Plano, usePlanos } from '@/services/planos';
+import { moeda } from '@/util/formatter';
 import {
   Button,
   Card,
@@ -79,7 +79,7 @@ export default function Assinar() {
                 <span className="text-center">{plano.descricao}</span>
               </CardBody>
               <CardBody className="flex items-center">
-                <span className="text-2xl text-primary-alt font-bold">{currency(plano.valor)}</span>
+                <span className="text-2xl text-primary-alt font-bold">{moeda(plano.valor)}</span>
               </CardBody>
               <CardFooter>
                 <Button

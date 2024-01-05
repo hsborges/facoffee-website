@@ -1,4 +1,4 @@
-import Navbar from '@/app/components/Navbar';
+import Navbar from '@/components/Navbar';
 import classNames from 'classnames';
 import type { Metadata } from 'next';
 import { Rubik } from 'next/font/google';

@@ -1,7 +1,7 @@
 import { get } from 'lodash';
 import useSWR from 'swr';
 
-import { httpClient } from './client';
+import { httpClient } from '../util/http-client';
 import { Plano } from './planos';
 
 export const urls = {

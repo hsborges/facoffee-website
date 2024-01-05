@@ -1,6 +1,6 @@
 import useSWR from 'swr';
 
-import { httpClient } from './client';
+import { httpClient } from '../util/http-client';
 
 export const urls = {
   lista: '/api/planos',

@@ -3,7 +3,7 @@
 import { Avatar, Button, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
 import classNames from 'classnames';
 import Link from 'next/link';
-import { useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 import { MdAdminPanelSettings } from 'react-icons/md';
 import { useSessionContext } from 'supertokens-auth-react/recipe/session';
 

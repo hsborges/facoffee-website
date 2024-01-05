@@ -1,15 +1,15 @@
 'use client';
 
-import { cancelarInscricao, useAssinatura } from '@/apis/assinatura';
-import { usePlano } from '@/apis/planos';
-import { currency, date } from '@/utils/formatter';
+import { cancelarInscricao, useAssinatura } from '@/services/assinatura';
+import { usePlano } from '@/services/planos';
+import { data, moeda } from '@/util/formatter';
 import { Badge, Button, Highlight, SkeletonText, useToast } from '@chakra-ui/react';
 import Link from 'next/link';
 import { useMemo, useState } from 'react';
 import { AiOutlineForm } from 'react-icons/ai';
 import { MdWarning } from 'react-icons/md';
 
-import { CodeConfirmationDialog } from '../../../components/CodeConfirmationDialog';
+import { CodeConfirmationDialog } from '../../../../components/CodeConfirmationDialog';
 
 export function AssinaturaStatus(props: { className?: string }) {
   const { isLoading, data: assinatura, error, mutate } = useAssinatura();
@@ -65,23 +65,23 @@ export function AssinaturaStatus(props: { className?: string }) {
             </span>
             <span className="w-full flex flex-col items-center">
               <span className="text-sm text-gray-500">Valor</span>
-              <span className="text-primary font-bold">{currency(plano?.valor || 0)}</span>
+              <span className="text-primary font-bold">{moeda(plano?.valor || 0)}</span>
             </span>
             <span className="w-full flex flex-col items-center">
               <span className="text-sm text-gray-500">Iniciada em</span>
-              <span className="text-primary font-bold">{date(assinatura.inicio_em, true)}</span>
+              <span className="text-primary font-bold">{data(assinatura.inicio_em, true)}</span>
             </span>
             {assinatura.fim_em && !assinatura.encerrada_em && (
               <span className="w-full flex flex-col items-center">
                 <span className="text-sm text-gray-500">Encerra em</span>
-                <span className="text-primary font-bold">{date(assinatura.fim_em, true)}</span>
+                <span className="text-primary font-bold">{data(assinatura.fim_em, true)}</span>
               </span>
             )}
             {assinatura.encerrada_em && (
               <span className="w-full flex flex-col items-center">
                 <span className="text-sm text-gray-500">Encerrada em</span>
                 <span className="text-primary font-bold">
-                  {date(assinatura.encerrada_em, true)}
+                  {data(assinatura.encerrada_em, true)}
                 </span>
               </span>
             )}

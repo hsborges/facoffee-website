@@ -1,6 +1,6 @@
 'use client';
 
-import { sendDeposito } from '@/apis/financeiro';
+import { sendDeposito } from '@/services/financeiro';
 import {
   Button,
   FormControl,
