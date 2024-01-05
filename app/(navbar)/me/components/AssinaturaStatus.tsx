@@ -9,7 +9,7 @@ import { useMemo, useState } from 'react';
 import { AiOutlineForm } from 'react-icons/ai';
 import { MdWarning } from 'react-icons/md';
 
-import { CodeConfirmationDialog } from '../../../../components/CodeConfirmationDialog';
+import { ConfirmationDialog } from '../../../../components/ConfirmationDialog';
 
 export function AssinaturaStatus(props: { className?: string }) {
   const { isLoading, data: assinatura, error, mutate } = useAssinatura();
@@ -86,7 +86,7 @@ export function AssinaturaStatus(props: { className?: string }) {
               </span>
             )}
             <span className="w-full flex flex-col items-center pt-4">
-              <CodeConfirmationDialog
+              <ConfirmationDialog
                 isOpen={showConfirm}
                 onCancel={() => setShowConfirm(false)}
                 onConfirm={() =>
@@ -113,7 +113,7 @@ export function AssinaturaStatus(props: { className?: string }) {
                     o valor pago será devolvido como crédito proporcionalmente ao tempo restante.
                   </Highlight>
                 </div>
-              </CodeConfirmationDialog>
+              </ConfirmationDialog>
               <span className="text-sm text-gray-500">Ações</span>
               <span className="font-bold text-md">
                 <Button
