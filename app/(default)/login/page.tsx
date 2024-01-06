@@ -1,6 +1,6 @@
 'use client';
 
-import { SigninForm } from '@/components/SignForm';
+import { SigninForm } from '@/components/Authentication';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useMemo } from 'react';
 import { doesSessionExist } from 'supertokens-auth-react/recipe/session';

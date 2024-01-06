@@ -2,8 +2,6 @@
 
 import Logo from '@/components/Logo';
 import {
-  Alert,
-  AlertIcon,
   Button,
   FormControl,
   FormErrorMessage,
@@ -14,10 +12,9 @@ import {
 } from '@chakra-ui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import classNames from 'classnames';
-import { set } from 'lodash';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { signIn, signUp } from 'supertokens-auth-react/recipe/emailpassword';
 import { z } from 'zod';
@@ -160,13 +157,15 @@ function Form(props: FormProps) {
       )}
       <FormControl isRequired isInvalid={!!errors.email} className="my-3">
         <FormLabel>Email</FormLabel>
-        <Input type="email" {...register('email')} />
-        <FormErrorMessage>{errors.email?.message}</FormErrorMessage>
+        <Input type="email" {...register('email')} data-testid="form-email" />
+        <FormErrorMessage data-testid="form-email-error">{errors.email?.message}</FormErrorMessage>
       </FormControl>
       <FormControl isInvalid={!!errors.password} isRequired className="my-3">
         <FormLabel>Senha</FormLabel>
-        <PasswordInput {...register('password')} />
-        <FormErrorMessage>{errors.password?.message}</FormErrorMessage>
+        <PasswordInput {...register('password')} data-testid="form-password" />
+        <FormErrorMessage data-testid="form-password-error">
+          {errors.password?.message}
+        </FormErrorMessage>
       </FormControl>
       {props.type === 'signup' && (
         <FormControl isRequired isInvalid={!!errors.confirm_password} className="my-3">
@@ -180,6 +179,7 @@ function Form(props: FormProps) {
         colorScheme="primary-alt"
         className="my-5 hover:bg-primary-alt"
         isLoading={loading}
+        data-testid="form-submit"
       >
         {props.type === 'signin' ? 'Entrar' : 'Registrar'}
       </Button>
