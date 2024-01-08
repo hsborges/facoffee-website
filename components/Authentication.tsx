@@ -140,18 +140,22 @@ function Form(props: FormProps) {
       )}
       onSubmit={handleSubmit(submitForm)}
     >
-      <Logo horizontal size="lg" className="mb-5" />
+      <Logo horizontal size="lg" className="mb-5" link="/" />
       {props.type === 'signup' && (
         <div className="flex gap-5 my-3">
           <FormControl isRequired isInvalid={!!errors.first_name}>
             <FormLabel>Nome</FormLabel>
-            <Input type="text" {...register('first_name')} />
-            <FormErrorMessage>{errors.first_name?.message}</FormErrorMessage>
+            <Input type="text" {...register('first_name')} data-testid="form-first_name" />
+            <FormErrorMessage data-testid="form-first_name-error">
+              {errors.first_name?.message}
+            </FormErrorMessage>
           </FormControl>
           <FormControl isRequired isInvalid={!!errors.last_name}>
             <FormLabel>Sobernome</FormLabel>
-            <Input type="text" {...register('last_name')} />
-            <FormErrorMessage>{errors.last_name?.message}</FormErrorMessage>
+            <Input type="text" {...register('last_name')} data-testid="form-last_name" />
+            <FormErrorMessage data-testid="form-last_name-error">
+              {errors.last_name?.message}
+            </FormErrorMessage>
           </FormControl>
         </div>
       )}
@@ -170,8 +174,10 @@ function Form(props: FormProps) {
       {props.type === 'signup' && (
         <FormControl isRequired isInvalid={!!errors.confirm_password} className="my-3">
           <FormLabel>Confirmar Senha</FormLabel>
-          <PasswordInput {...register('confirm_password')} />
-          <FormErrorMessage>{errors.confirm_password?.message}</FormErrorMessage>
+          <PasswordInput {...register('confirm_password')} data-testid="form-confirm_password" />
+          <FormErrorMessage data-testid="form-confirm_password-error">
+            {errors.confirm_password?.message}
+          </FormErrorMessage>
         </FormControl>
       )}
       <Button

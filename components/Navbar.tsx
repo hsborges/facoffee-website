@@ -28,9 +28,12 @@ export default function Navbar(props: { className?: string }) {
         props.className,
       )}
     >
-      <Link href={context.loading || !context.doesSessionExist ? '/' : '/me'}>
-        <Logo variant="white" size="lg" />
-      </Link>
+      <Logo
+        variant="white"
+        size="lg"
+        link={!context.loading && context.doesSessionExist ? '/me' : '/'}
+      />
+
       {!context.loading && context.doesSessionExist ? (
         <div className="flex items-center gap-8">
           {context.accessTokenPayload?.roles?.includes('admin') && (
