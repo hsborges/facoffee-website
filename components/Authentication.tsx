@@ -192,7 +192,7 @@ function Form(props: FormProps) {
       {url && (
         <Text className="text-sm mt-3 text-center">
           {props.type === 'signin' ? 'Ainda não é cadastrado?' : 'Possui uma conta?'}{' '}
-          <Link href={url} className="text-primary-alt font-bold">
+          <Link href={url} className="text-primary-alt font-bold" data-testid="form-link">
             {props.type === 'signin' ? 'Cadastre-se' : 'Entre'}
           </Link>
         </Text>

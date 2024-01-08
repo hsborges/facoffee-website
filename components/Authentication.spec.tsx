@@ -58,8 +58,8 @@ describe('Authentication', () => {
   describe('SigninForm', () => {
     it('deve exibir link para cadastro', () => {
       render(<SigninForm signupUrl="http://localhost/registrar" redirectTo="/" />);
-      expect(screen.getByRole('link')).toBeInTheDocument();
-      expect(screen.getByRole('link')).toHaveProperty('href', 'http://localhost/registrar');
+      expect(screen.getByTestId('form-link')).toBeInTheDocument();
+      expect(screen.getByTestId('form-link')).toHaveProperty('href', 'http://localhost/registrar');
     });
 
     it('deve ser obrigatório informar email e senha', async () => {
@@ -131,8 +131,8 @@ describe('Authentication', () => {
   describe('SignupForm', () => {
     it('deve exibir link para login', () => {
       render(<SignupForm signinUrl="http://localhost/login" redirectTo="/" />);
-      expect(screen.getByRole('link')).toBeInTheDocument();
-      expect(screen.getByRole('link')).toHaveProperty('href', 'http://localhost/login');
+      expect(screen.getByTestId('form-link')).toBeInTheDocument();
+      expect(screen.getByTestId('form-link')).toHaveProperty('href', 'http://localhost/login');
     });
 
     it('deve ser obrigatório informar nome, sobrenome, email, senha e confirmar senha', async () => {
