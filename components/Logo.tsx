@@ -12,7 +12,7 @@ export type LogoProps = HTMLAttributes<HTMLElement> & {
 
 export default function Logo(props: LogoProps) {
   const colors =
-    props.variant === 'normal'
+    !props.variant || props.variant === 'normal'
       ? { primary: 'text-primary', secondary: 'text-primary-alt' }
       : { primary: 'text-white', secondary: 'text-primary-alt' };
 

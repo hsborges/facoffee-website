@@ -1,6 +1,6 @@
 'use client';
 
-import { ChakraProvider, defineStyleConfig, withDefaultColorScheme } from '@chakra-ui/react';
+import { ChakraProvider, defineStyleConfig } from '@chakra-ui/react';
 import { extendTheme } from '@chakra-ui/react';
 import SuperTokens, { SuperTokensWrapper } from 'supertokens-auth-react';
 import EmailPassword from 'supertokens-auth-react/recipe/emailpassword';

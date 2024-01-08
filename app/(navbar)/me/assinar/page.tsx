@@ -1,6 +1,6 @@
 'use client';
 
-import { inscrever, useAssinatura } from '@/services/assinatura';
+import { inscrever } from '@/services/assinatura';
 import { Plano, usePlanos } from '@/services/planos';
 import { moeda } from '@/util/formatter';
 import {
@@ -40,7 +40,7 @@ export default function Assinar() {
   const router = useRouter();
   const toast = useToast();
 
-  const { isLoading, data: planos } = usePlanos(true);
+  const { data: planos } = usePlanos(true);
 
   const [plano, setPlano] = useState<Plano>();
   const [periodo, setPeriodo] = useState<number>();
@@ -137,6 +137,7 @@ export default function Assinar() {
               colorScheme="primary"
               size="lg"
               rightIcon={<FaCheck />}
+              isLoading={submiting}
               onClick={() =>
                 Promise.resolve(setSubmiting(true))
                   .then(() => inscrever(plano as Plano, periodo))

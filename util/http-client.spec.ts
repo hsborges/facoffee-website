@@ -17,6 +17,8 @@ describe('Testa httpClient', () => {
       });
   });
 
+  afterAll(() => scope?.done());
+
   it('deve conter bearer token se usuario estiver logado', async () => {
     jest.spyOn(Session, 'getAccessToken').mockResolvedValue('token');
     await expect(httpClient.get('/any')).resolves.toHaveProperty('status', 200);
