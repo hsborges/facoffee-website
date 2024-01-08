@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "jest --coverage --collectCoverageFrom='./**/*.{ts,tsx}'"
+    "test": "jest --coverage --collectCoverageFrom='./!(.next)/**/*.{ts,tsx}'"
   },
   "dependencies": {
     "@chakra-ui/next-js": "^2.2.0",
