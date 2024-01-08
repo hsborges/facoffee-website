@@ -3,8 +3,7 @@
 import { Button } from '@chakra-ui/react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
-import { FaEnvelope } from 'react-icons/fa';
-import { FaEnvelopeCircleCheck } from 'react-icons/fa6';
+import { FaEnvelope, FaEnvelopeCircleCheck } from 'react-icons/fa6';
 import {
   getEmailVerificationTokenFromURL,
   sendVerificationEmail,

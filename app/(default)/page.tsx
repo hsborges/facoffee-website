@@ -1,6 +1,6 @@
 import { Button } from '@chakra-ui/react';
 import Link from 'next/link';
-import { FaArrowRight } from 'react-icons/fa';
+import { FaRightToBracket } from 'react-icons/fa6';
 
 export default function Home() {
   return (
@@ -20,7 +20,7 @@ export default function Home() {
           bgColor="primary"
           size="lg"
           _hover={{ color: 'primary', bgColor: 'primary-alt' }}
-          rightIcon={<FaArrowRight />}
+          rightIcon={<FaRightToBracket />}
         >
           Entrar
         </Button>

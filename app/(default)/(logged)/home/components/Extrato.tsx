@@ -25,7 +25,7 @@ import classNames from 'classnames';
 import { capitalize } from 'lodash';
 import Link from 'next/link';
 import { useState } from 'react';
-import { MdOutlineFileUpload } from 'react-icons/md';
+import { FaUpload } from 'react-icons/fa6';
 
 const StatusColors: Record<Credito['status'], string> = {
   pendente: 'text-gray-500',
@@ -173,7 +173,7 @@ export function Extrato(props: { className?: string }) {
             <Button
               variant="primary"
               size="sm"
-              leftIcon={<MdOutlineFileUpload className="text-xl" />}
+              leftIcon={<FaUpload />}
               as={Link}
               href="/comprovante"
             >

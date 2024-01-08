@@ -1,6 +1,6 @@
 import { Input, InputGroup, InputProps, InputRightElement, useBoolean } from '@chakra-ui/react';
 import { forwardRef, useMemo } from 'react';
-import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import { FaEye, FaEyeSlash } from 'react-icons/fa6';
 
 export const PasswordInput = forwardRef(function PasswordInput(props: InputProps, ref) {
   const [show, setShow] = useBoolean(false);

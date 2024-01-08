@@ -7,8 +7,7 @@ import { data, moeda } from '@/util/formatter';
 import { Badge, Button, Highlight, SkeletonText, useToast } from '@chakra-ui/react';
 import Link from 'next/link';
 import { useMemo, useState } from 'react';
-import { AiOutlineForm } from 'react-icons/ai';
-import { MdWarning } from 'react-icons/md';
+import { FaPenToSquare, FaTriangleExclamation } from 'react-icons/fa6';
 
 export function AssinaturaStatus(props: { className?: string }) {
   const { isLoading, data: assinatura, error, mutate } = useAssinatura();
@@ -48,7 +47,7 @@ export function AssinaturaStatus(props: { className?: string }) {
           <>
             <span className="flex">Você não possui assinatura ativa</span>
             <Button variant="primary" as={Link} href="/assinar">
-              <AiOutlineForm className="mr-2" />
+              <FaPenToSquare className="mr-2" />
               Assinar agora
             </Button>
           </>
@@ -119,7 +118,7 @@ export function AssinaturaStatus(props: { className?: string }) {
                   className="flex items-center gap-1 border-red-400 border-2"
                   _hover={{ bgColor: 'red.100' }}
                   color="red.400"
-                  leftIcon={<MdWarning />}
+                  leftIcon={<FaTriangleExclamation />}
                   size={'sm'}
                   onClick={() => setShowConfirm(true)}
                 >

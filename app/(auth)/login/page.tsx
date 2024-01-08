@@ -1,9 +1,9 @@
 'use client';
 
-import { SignupForm } from '@/components/Authentication';
+import { SigninForm } from '@/components/Authentication';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useMemo } from 'react';
-import { doesSessionExist } from 'supertokens-web-js/recipe/session';
+import { doesSessionExist } from 'supertokens-auth-react/recipe/session';
 
 export default function LoginPage() {
   const params = useSearchParams();
@@ -11,22 +11,13 @@ export default function LoginPage() {
 
   useEffect(() => {
     doesSessionExist().then((exist) => exist && router.push('/home'));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [router]);
 
   const redirectTo = useMemo(() => params.get('redirectToPath') || '/home', [params]);
 
-  const signinUrl = useMemo(
-    () =>
-      params.get('redirectToPath')
-        ? `/login?redirectToPath=${params.get('redirectToPath')}`
-        : '/login',
-    [params],
-  );
-
   return (
     <div className="h-full flex justify-center align-center mt-[-5vh]">
-      <SignupForm signinUrl={signinUrl} redirectTo={redirectTo} />
+      <SigninForm signupUrl={`/registrar?redirectToPath=${redirectTo}`} redirectTo={redirectTo} />
     </div>
   );
 }

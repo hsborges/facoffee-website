@@ -26,7 +26,7 @@ import {
 import classNames from 'classnames';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { FaArrowRight, FaCheck } from 'react-icons/fa';
+import { FaArrowRight, FaCheck } from 'react-icons/fa6';
 
 const steps = [
   { title: 'Plano', description: 'Selecione o plano' },

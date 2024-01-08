@@ -16,8 +16,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { FaFileInvoiceDollar } from 'react-icons/fa';
-import { MdOutlineFileUpload } from 'react-icons/md';
+import { FaFileInvoiceDollar, FaUpload } from 'react-icons/fa6';
 import { z } from 'zod';
 
 type Form = {
@@ -126,7 +125,7 @@ export default function Comprovante() {
           <Button
             type="submit"
             variant="primary"
-            leftIcon={<MdOutlineFileUpload className="text-xl" />}
+            leftIcon={<FaUpload className="text-md" />}
             isLoading={submiting}
           >
             Enviar
