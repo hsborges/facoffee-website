@@ -44,7 +44,10 @@ export default function Comprovante() {
         valor: z
           .string()
           .min(1, { message: 'Valor é obrigatório' })
-          .regex(/^\d{1,3}(\.\d{3})*(\,\d{2})?$/, { message: 'Não está na formatação correta' }),
+          .regex(/^\d{1,3}(\.\d{3})*(\,\d{2})?$/, { message: 'Não está na formatação correta' })
+          .refine((value) => parseFloat(value.replace(/\./g, '').replace(',', '.')) > 0, {
+            message: 'Valor deve ser maior que zero',
+          }),
         comprovante: z
           .instanceof(FileList)
           .refine((files) => files.length > 0, { message: 'Comprovante é obrigatório' }),
@@ -85,7 +88,7 @@ export default function Comprovante() {
       <form className="w-1/2" onSubmit={handleSubmit(onSubmit)}>
         <div className="flex my-2 gap-2">
           <FormControl isInvalid={!!errors.referencia} isReadOnly>
-            <FormLabel>Referencia</FormLabel>
+            <FormLabel>Referência</FormLabel>
             <Input
               type="text"
               {...register('referencia')}
