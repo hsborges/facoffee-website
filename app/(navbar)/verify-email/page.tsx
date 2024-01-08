@@ -21,7 +21,7 @@ export default function EmailVerification() {
     if (getEmailVerificationTokenFromURL()) {
       Promise.resolve(setSent(true))
         .then(() => verifyEmail({}))
-        .then(async (res) => res.status === 'OK' && router.push('/me'))
+        .then(async (res) => res.status === 'OK' && router.push('/home'))
         .finally(() => setSent(false));
     }
   }, [router]);

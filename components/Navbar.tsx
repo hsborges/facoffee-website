@@ -31,7 +31,7 @@ export default function Navbar(props: { className?: string }) {
       <Logo
         variant="white"
         size="lg"
-        link={!context.loading && context.doesSessionExist ? '/me' : '/'}
+        link={!context.loading && context.doesSessionExist ? '/home' : '/'}
       />
 
       {!context.loading && context.doesSessionExist ? (

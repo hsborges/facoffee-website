@@ -57,10 +57,10 @@ describe('Page: ComprovantePage', () => {
     }
   });
 
-  it('deve redirecionar usuário para /me após enviar comprovante', async () => {
+  it('deve redirecionar usuário para /home após enviar comprovante', async () => {
     render(<ComprovantePage />);
     await enviarFormulario({});
-    expect(pushFn).toHaveBeenCalledWith('/me');
+    expect(pushFn).toHaveBeenCalledWith('/home');
   });
 
   it('deve enviar dados não formatados para o serviço', async () => {

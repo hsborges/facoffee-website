@@ -66,7 +66,7 @@ export default function Comprovante() {
           descricao: data.descricao || undefined,
         }),
       )
-      .then(() => router.push('/me'))
+      .then(() => router.push('/home'))
       .finally(() => setSubmiting(false));
 
     toast.promise(promise, {

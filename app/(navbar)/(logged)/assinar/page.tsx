@@ -147,7 +147,7 @@ export default function Assinar() {
                       title: 'Assinatura realizada com sucesso!',
                       colorScheme: 'primary',
                     });
-                    router.push('/me');
+                    router.push('/home');
                   })
                   .catch((err) =>
                     toast({

@@ -1,5 +1,6 @@
 'use client';
 
+import { ConfirmationDialog } from '@/components/ConfirmationDialog';
 import { cancelarInscricao, useAssinatura } from '@/services/assinatura';
 import { usePlano } from '@/services/planos';
 import { data, moeda } from '@/util/formatter';
@@ -8,8 +9,6 @@ import Link from 'next/link';
 import { useMemo, useState } from 'react';
 import { AiOutlineForm } from 'react-icons/ai';
 import { MdWarning } from 'react-icons/md';
-
-import { ConfirmationDialog } from '../../../../components/ConfirmationDialog';
 
 export function AssinaturaStatus(props: { className?: string }) {
   const { isLoading, data: assinatura, error, mutate } = useAssinatura();
@@ -48,7 +47,7 @@ export function AssinaturaStatus(props: { className?: string }) {
         {semAssinatura && (
           <>
             <span className="flex">Você não possui assinatura ativa</span>
-            <Button variant="primary" as={Link} href="/me/assinar">
+            <Button variant="primary" as={Link} href="/assinar">
               <AiOutlineForm className="mr-2" />
               Assinar agora
             </Button>

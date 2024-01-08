@@ -10,11 +10,11 @@ export default function LoginPage() {
   const router = useRouter();
 
   useEffect(() => {
-    doesSessionExist().then((exist) => exist && router.push('/me'));
+    doesSessionExist().then((exist) => exist && router.push('/home'));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const redirectTo = useMemo(() => params.get('redirectToPath') || '/me', [params]);
+  const redirectTo = useMemo(() => params.get('redirectToPath') || '/home', [params]);
 
   return (
     <div className="h-full flex justify-center align-center mt-[-5vh]">

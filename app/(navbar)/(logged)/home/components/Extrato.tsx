@@ -175,7 +175,7 @@ export function Extrato(props: { className?: string }) {
               size="sm"
               leftIcon={<MdOutlineFileUpload className="text-xl" />}
               as={Link}
-              href="/me/comprovante"
+              href="/comprovante"
             >
               Enviar comprovante
             </Button>

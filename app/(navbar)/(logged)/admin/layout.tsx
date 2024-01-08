@@ -7,6 +7,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const context = useSessionContext();
 
   if (context.loading) return <></>;
-  else if (!context.accessTokenPayload.roles.includes('admin')) return redirect('/me');
+  else if (!context.accessTokenPayload.roles.includes('admin')) return redirect('/home');
   else return <>{children}</>;
 }
