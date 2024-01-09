@@ -11,10 +11,10 @@ if (typeof window !== 'undefined') {
   SuperTokens.init({
     appInfo: {
       appName: 'FACOFFEE',
-      apiDomain: process.env.NEXT_PUBLIC_BASE_URL,
-      apiBasePath: process.env.NEXT_PUBLIC_BASE_URL_PATH,
-      websiteDomain: process.env.NEXT_PUBLIC_WEBSITE_URL,
-      websiteBasePath: process.env.NEXT_PUBLIC_WEBSITE_URL_PATH,
+      apiDomain: window.location.origin,
+      apiBasePath: '/auth',
+      websiteDomain: window.location.origin,
+      websiteBasePath: '/',
     },
     recipeList: [
       EmailPassword.init({

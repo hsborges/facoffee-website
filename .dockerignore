@@ -1,0 +1,8 @@
+.next
+.swc
+.vscode
+.yarn
+coverage
+node_modules
+.env.*
+Dockerfile
