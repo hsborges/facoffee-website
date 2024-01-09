@@ -17,6 +17,6 @@ COPY --from=build-stage /app/public ./public
 
 RUN yarn install --production --frozen-lockfile && yarn cache clean
 
-EXPOSE 3000
+EXPOSE 80
 
-CMD yarn start
+CMD PORT=80 yarn start
