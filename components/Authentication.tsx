@@ -151,7 +151,7 @@ function Form(props: FormProps) {
             </FormErrorMessage>
           </FormControl>
           <FormControl isRequired isInvalid={!!errors.last_name}>
-            <FormLabel>Sobernome</FormLabel>
+            <FormLabel>Sobrenome</FormLabel>
             <Input type="text" {...register('last_name')} data-testid="form-last_name" />
             <FormErrorMessage data-testid="form-last_name-error">
               {errors.last_name?.message}
